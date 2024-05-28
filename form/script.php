@@ -10,6 +10,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Process form data
         echo "<h1>Thank you, $name!</h1>";
         echo "<p>We have received your email address: $email</p>";
+
+        // Save data to CSV file
+        $data = [$name, $email, $phone, $address];
+        $file = 'data.csv';
+        if (!file_exists($file)) {
+            $header = ['Name', 'Email', 'Phone', 'Address'];
+            file_put_contents($file, implode(',', $header) . PHP_EOL);
+        }
+        file_put_contents($file, implode(',', $data) . PHP_EOL, FILE_APPEND);
     } else {
         echo "<h1>Error</h1>";
         if (empty($name) || empty($email)) {
