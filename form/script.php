@@ -5,12 +5,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = htmlspecialchars($_POST['phone']);
     $address = htmlspecialchars($_POST['address']);
 
-    if (!empty($name) && !empty($email)) {
+    // Basic email validation
+    if (!empty($name) && !empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Process form data
         echo "<h1>Thank you, $name!</h1>";
         echo "<p>We have received your email address: $email</p>";
     } else {
         echo "<h1>Error</h1>";
-        echo "<p>All fields are required.</p>";
+        if (empty($name) || empty($email)) {
+            echo "<p>All fields are required.</p>";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "<p>Invalid email address.</p>";
+        }
     }
 } else {
     echo "<h1>Error</h1>";
